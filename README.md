@@ -14,10 +14,8 @@ $docker build . -t assembly
 $docker run -d -it -v /Users/your_workspace/your_repo:/app/src --name assembly assembly
 ```
 
-3. Access the container
+3. Run the bash in the container
 
 ```bash
 $docker exec -it assembly /bin/bash
 ```
-
-## Hello world
