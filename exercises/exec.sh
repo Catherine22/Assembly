@@ -13,13 +13,14 @@ check_status() {
 
 echo "Assembling with Nasm"
 nasm -f elf64 -o $FILE.o $FILE.asm
-check_status nasm
+check_status "nasm"
 
 echo "Linking..."
 gcc -m64 -o $FILE $FILE.o
-check_status gcc
+check_status "gcc"
 
 echo "Executing..."
 ./$FILE
+check_status "shell execution"
 
 exit 0
