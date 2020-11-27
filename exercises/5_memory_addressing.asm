@@ -24,5 +24,5 @@ main:
     int 0x80    ;call kernel
 
 section .data
-name db "Zara Ali", 0xa
+name db "Zara Ali", 0xA
 len equ $ - name ;length of our dear string

@@ -12,5 +12,5 @@ main:
     int 0x80    ;call kernel
 
 section .data
-msg db "Hello, world!", 0xa
+msg db "Hello, world!", 0xA
 len equ $ - msg ;length of our dear string

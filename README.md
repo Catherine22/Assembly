@@ -45,10 +45,39 @@ $./exec 2_hello.asm
 | 5   | sys_open  | const char \*  | int           | int    |
 | 6   | sys_close | unsigned int   |               |        |
 
+## Radare 2
+
+### Set up environments
+
+1. Build the docker image
+
+```bash
+$docker build . -t radare2
+```
+
+2. Run the image in the background and share the workspace with the container
+
+```bash
+$docker run -d -it -v $(pwd):/app/src --name radare2 radare2
+```
+
+3. Run the bash in the container
+
+```bash
+$docker exec -it radare2 /bin/bash
+$cd /app/src/
+```
+
+### Cheat Sheet
+
+```bash
+$radare2 crackme0x01
+```
+
 ## References
 
 -   [programming from the ground up]
 -   [assembly tutorial]
 
 [programming from the ground up]: https://www.amazon.co.uk/Programming-Ground-Up-Jonathan-Bartlett/dp/0975283847
-[assembly tutorial]: tutorialspoint.com/assembly_programming/assembly_tutorial.pdf
+[assembly tutorial]: https://www.tutorialspoint.com/assembly_programming/assembly_tutorial.pdf
