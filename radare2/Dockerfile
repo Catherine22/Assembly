@@ -114,4 +114,5 @@ RUN r2pm init && \
   chown -R r2:r2 /home/r2/.config
 
 # Base command for container
+RUN cd /app/src
 CMD ["/bin/bash"]

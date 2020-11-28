@@ -53,5 +53,6 @@ RUN gcc --version
 RUN yum install nasm -y
 RUN nasm -v
 
+RUN cd /app/src
 CMD ["/bin/bash"]
 

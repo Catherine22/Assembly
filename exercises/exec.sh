@@ -10,17 +10,22 @@ check_status() {
         exit 1
     fi
 }
+log() {
+    local MESSAGE="${@}"
+    echo "${MESSAGE}"
+}
 
-echo "Assembling with Nasm"
-nasm -f elf64 -o $FILE.o $FILE.asm
+log "Assembling with Nasm"
+nasm -f elf64 -g -o $FILE.o $FILE.asm
 check_status "nasm"
 
-echo "Linking..."
+log "Linking..."
 gcc -m64 -o $FILE $FILE.o
 check_status "gcc"
 
-echo "Executing..."
+log "Executing..."
 ./$FILE
+
 check_status "shell execution"
 
 exit 0

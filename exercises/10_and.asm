@@ -8,7 +8,7 @@ section .text
     global main
 
 main:
-    mov ax, 8h              ;getting 8 in the ax
+    mov ax, 6h              ;getting 8 in the ax
     and ax, 1               ;and ax with 1
     jz evnn
     mov eax, SYS_WRITE
@@ -17,7 +17,9 @@ main:
     mov edx, len2
 
     int 0x80
-    jmp outprog evnn:
+    jmp outprog 
+
+evnn:
     mov ah, 09h 
     mov eax, SYS_WRITE
     mov ebx, STDOUT
