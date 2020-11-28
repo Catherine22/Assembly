@@ -1,3 +1,8 @@
+;The data section is used for declaring constants. This data does not change at runtime
+section .data
+    name db "Zara Ali", 0xA
+    len equ $ - name ;length of our dear string
+
 section .text
 	global main
 
@@ -22,7 +27,3 @@ main:
     ;4. terminating
     mov eax, 1  ;system call number (sys_exit)
     int 0x80    ;call kernel
-
-section .data
-name db "Zara Ali", 0xA
-len equ $ - name ;length of our dear string

@@ -1,3 +1,7 @@
+section .data
+    msg db "Hello, world!", 0xA
+    len equ $ - msg ;length of our dear string
+
 section .text
 	global main
 
@@ -10,7 +14,3 @@ main:
 
     mov eax, 1  ;system call number (sys_exit)
     int 0x80    ;call kernel
-
-section .data
-msg db "Hello, world!", 0xA
-len equ $ - msg ;length of our dear string

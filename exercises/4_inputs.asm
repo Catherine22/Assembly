@@ -1,4 +1,3 @@
-;The data section is used for declaring constants. This data does not change at runtime
 section .data
     userMsg db "Please enter a number (5 digits max): "
     lenUserMsg equ $-userMsg
@@ -12,6 +11,7 @@ section .bss    ;uninitialised data
 ;The text section is used for keeping the actual code
 section .text
     global main
+
 main:
     ;User prompt
     mov eax, 4  ;system call number (sys_write)

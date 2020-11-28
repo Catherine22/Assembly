@@ -15,7 +15,7 @@ section .text
 
 main:
     mov ax, 6h              ;getting 8 in the ax
-    and ax, 1               ;and ax with 1
+    test ax, 1              ;what TEST does is similar to AND, but TEST does not change it's value
     jz evnn
     mov eax, SYS_WRITE
     mov ebx, STDOUT
