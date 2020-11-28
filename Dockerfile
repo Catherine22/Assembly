@@ -43,7 +43,7 @@ RUN ../gcc-7.3.0/configure                           \
     --enable-threads=posix                           \
     --enable-__cxa_atexit                            \
     --enable-clocale=gnu                             \
-    --enable-multilib                                \
+    --disable-multilib                               \
     --enable-languages=all
 RUN make
 RUN make install

@@ -2,6 +2,8 @@
 
 ## Set up environments
 
+NOTICE, the following docker image supports x86_64 architecture.
+
 1. Build the docker image
 
 ```bash

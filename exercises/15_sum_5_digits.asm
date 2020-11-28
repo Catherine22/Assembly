@@ -35,10 +35,10 @@ add_loop:
     mov eax, SYS_WRITE
     int 0x80
 
-    mov edx, 5
-    mov ecx, sum
-    mov ebx, STDOUT
     mov eax, SYS_WRITE
+    mov ebx, STDOUT
+    mov ecx, sum
+    mov edx, 5
     int 0x80
 
     mov eax, SYS_EXIT

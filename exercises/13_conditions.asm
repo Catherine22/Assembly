@@ -25,22 +25,22 @@ main:
 
     cmp_num3:
         cmp ecx, [num3]
-        jg _exit    ;jump greater
+        jg exit    ;jump greater
         mov ecx, [num3]
     
-    _exit:
+    exit:
         mov [largest], word ecx
+        mov eax, SYS_WRITE
+        mov ebx, STDOUT
         mov ecx, msg
         mov edx, len
-        mov ebx, STDOUT
-        mov eax, SYS_WRITE
         int 0x80
         
         nwln
+        mov eax, SYS_WRITE
+        mov ebx, STDOUT
         mov ecx, largest
         mov edx, 2
-        mov ebx, STDOUT
-        mov eax, SYS_WRITE
         int 0x80
 
         mov eax, 1

@@ -26,6 +26,5 @@ check_status "gcc"
 log "Executing..."
 ./$FILE
 
-check_status "shell execution"
-
+echo ""
 exit 0

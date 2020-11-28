@@ -1,3 +1,4 @@
+;Caesar cipher (shift)
 STDIN       equ 0
 STDOUT      equ 1
 SYS_EXIT    equ 1
@@ -16,8 +17,8 @@ section .text
 
 main:
     mov ecx, len
-    mov esi, plaintext
-    mov edi, ciphertext
+    mov esi, plaintext  ;esi points to the source
+    mov edi, ciphertext ;edi points to the destination
 
 shift:
     lodsb   ;loading operand into register (for bytes - LODSB, for words - LODSW, for doublewords - LODSD)
@@ -29,7 +30,7 @@ shift:
     mov eax, SYS_WRITE
     mov ebx, STDOUT
     mov ecx, ciphertext
-    mov edx, 20
+    mov edx, len
     int 0x80
 
     mov eax, SYS_EXIT

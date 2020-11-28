@@ -10,16 +10,16 @@ section .data
     s2 db "passw0rd", 0
     len_s2 equ $- s2
     msg1 db "Strings are equal", 0xA
-    len_m1 equ $- msg3
+    len_m1 equ $- msg1
     msg2 db "Strings are not equal", 0xA
-    len_m2 equ $- len4
+    len_m2 equ $- msg2
 
 section .text
     global main
 
 main:
-    mov esi, s1
-    mov edi, s2
+    mov esi, s1 ;esi points to the source
+    mov edi, s2 ;edi points to the destination
     mov ecx, len_s2
     cld
     repe cmpsb  ;comparing two strings (for bytes - CMPSB, for words - CMPSW, for doublewords - CMPSD)
@@ -31,7 +31,7 @@ main:
     mov ecx, msg2
     mov edx, len_m2
     int 80h
-    jump exit
+    jmp exit
 
 equal:
     mov eax, SYS_WRITE
