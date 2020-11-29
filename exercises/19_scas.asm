@@ -20,7 +20,9 @@ main:
     mov edi, my_string
     mov al, 'a'
     cld
-    repne scasb
+    repne scasb ;It is conditional repeat. It repeats the operation while the zero flag indicate not equal/zero. 
+                ;It stops when the ZF indicates equal/zero or when CX is decremented to zero.
+                ;(for bytes - SCASB, for words - SCASW, for doublewords - SCASD)
     je found    ;when found
 
     ;if not found then the following code
@@ -28,7 +30,7 @@ main:
     mov ebx, STDOUT
     mov ecx, msg_notfound
     mov edx, len_notfound
-    int 80h
+    int 0x80
 
     mov eax, SYS_WRITE
     mov ebx, STDIN
@@ -39,4 +41,4 @@ main:
         mov ebx, STDOUT
         mov ecx, msg_found
         mov edx, len_found
-        int 80h
+        int 0x80

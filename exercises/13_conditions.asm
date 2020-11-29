@@ -44,5 +44,5 @@ main:
         int 0x80
 
         mov eax, 1
-        int 80h
+        int 0x80
         

@@ -25,8 +25,9 @@ shift:
     add al, 02
     stosb   ;copying data from AL (for bytes - STOSB, for words - STOSW, for doublewords - STOSD)
     loop shift
-    cld
-    rep movsb
+    cld         ;use Clear Directoin Flag to make the operation left to right
+    rep movsb   ;REP, unconditional repeat. It repeats the operation until CX is zero.
+                ;moving (for bytes - MOVSB, for words - MOVSW, for doublewords - MOBSD) 
     mov eax, SYS_WRITE
     mov ebx, STDOUT
     mov ecx, ciphertext

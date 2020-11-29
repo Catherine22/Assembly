@@ -22,7 +22,9 @@ main:
     mov edi, s2 ;edi points to the destination
     mov ecx, len_s2
     cld
-    repe cmpsb  ;comparing two strings (for bytes - CMPSB, for words - CMPSW, for doublewords - CMPSD)
+    repe cmpsb  ;REPE: It is conditional repeat. It repeats the operation while the zero flag indicate equal/zero. 
+                ;It stops when the ZF indicates not equal/zero or when CX is zero.
+                ;comparing two strings (for bytes - CMPSB, for words - CMPSW, for doublewords - CMPSD)
     jecxz equal ;jump when ecx is zero
 
     ;If not equal then the following code
@@ -30,7 +32,7 @@ main:
     mov ebx, STDOUT
     mov ecx, msg2
     mov edx, len_m2
-    int 80h
+    int 0x80
     jmp exit
 
 equal:
@@ -38,9 +40,9 @@ equal:
     mov ebx, STDOUT
     mov ecx, msg1
     mov edx, len_m1
-    int 80h
+    int 0x80
 
 exit:
     mov eax, SYS_EXIT
     mov ebx, 0
-    int 80h
+    int 0x80
