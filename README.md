@@ -1,4 +1,4 @@
-# Assembly Exercise
+Assembly & Reverse Engineering
 
 ## Set up environments
 
@@ -22,13 +22,120 @@ $docker run -d -it -v $(pwd):/app/src --name assembly assembly
 $docker exec -it assembly /bin/bash
 ```
 
-### Build and Execute
+4. build and execute
 
 ```shell
 $./exec 2_hello.asm
 ```
 
+## Memory Allocation
+
+- Define constants or functions
+
+```assembly
+section .data
+	somePtr:
+    dd constant0
+	someFunc:
+		...
+		ret
+```
+
+- Access constants
+
+```assembly
+mov ... DWORD[somePtr] ...
+```
+
+- Table for generating constants
+
+  | Instruction | C++   | Access         | **Register** | Bits | Bytes |
+  | ----------- | ----- | -------------- | ------------ | ---- | ----- |
+  | dq 0x3      | long  | QWORD[somePtr] | r _ _        | 64   | 8     |
+  | dd 0x3      | int   | DWORD[somePtr] | e _ _        | 32   | 4     |
+  | dw 0x3      | short | WORD[somePtr]  | _ _          | 16   | 2     |
+  | db 0x3      | char  | BYTE[somePtr]  | _ l          | 8    | 1     |
+
+- Example 1 - Load a statically allocated integer from memory
+
+```assembly
+	mov eax, DWORD [myInt]	;copy myInt into eax
+	ret
+
+section .data
+myInt:
+	dd 0xa3a2a1a0	;"data DWORD" containing this value
+```
+
+- Example 2 - Copy a pointer value into a register
+
+```assembly
+	mov rdx, myIntPtr	;copy the address myIntPtr into rdx (like C++: p=someIntPtr;)
+	mov eax, DWORD [rdx]	;read memory rdx points to (like C++: return *p;)
+	ret
+
+section .data
+myIntPtr:	; A place in memory, where we're storing an integer
+	dd 123	; "data DWORD", our integer
+```
+
+- Example 3 - A 4-digit array
+
+```assembly
+	mov eax, DWORD [arr+4*2] ; read arr[2]
+	ret 
+
+section .data
+arr:  ;An integer array
+	dd 100 ;"data DWORD", arr[0]
+	dd 101 ;arr[1]
+	dd 102 ;arr[2]
+	dd 103 ;arr[3]
+```
+
+- Example 4 - String
+
+```assembly
+movzx eax,BYTE[myStr + 2] ;read this byte into eax
+ret
+
+section .data
+myStr:
+	db "woa"	;= db 'w','o','a'
+						;= db 'woa'
+						;= db 'w' db 'o' db 'a'
+```
+
+- Example 5 - update data
+
+```assembly
+mov DWORD[func+1],7 ;overwrite constant loaded by first, 0xb8 instruction
+call func
+ret
+
+section .data
+	func:
+		mov eax,2 ;<- modified at runtime!
+		ret
+```
+
+
+
 ## Registers
+
+| 64-bit   | 32-bit     | 16-bit     | 8-bit      |
+| -------- | ---------- | ---------- | ---------- |
+| rax      | eax        | ax         | ah and al  |
+| rcx      | ecx        | cx         | ch and cl  |
+| rdx      | edx        | dx         | dh and dl  |
+| rbx      | ebx        | bx         | bh and bl  |
+| rsp      | esp        | sp         | spl        |
+| rbp      | ebp        | bp         | bpl        |
+| rsi      | esi        | si         | sil        |
+| rdi      | edi        | di         | dil        |
+| r8 - r15 | r8d - r15d | r8w - r15w | r8b - r15b |
+
+For example:
 
 ```
 0x1122334455667788
@@ -133,32 +240,98 @@ $docker run -d -it -v $(pwd):/app/src --name radare2 radare2
 $docker exec -it radare2 /bin/bash
 ```
 
-### Getting started
+4. Get started by [crackmes]
 
-```bash
-$radare2 2_hello
+### Assembly to C
+
+- Stack
+
+```assembly
+push rbp 			;stash old value of rbp on the stack
+mov rbp, rsp	;rbp == stack pointer at the start of function
+sub rsp, 1000	;make some room on the stack
 ```
 
-### Cheat Sheet
+- Function and variables
 
--   any command + `?`: see help with any command. E.g. `a?`
--   debug commands
-    -   `db <addr/sym>`: set a breakpoint
-    -   `dc`: continue execution
-    -   `ds`: step instructions and into calls
-    -   `dso`: step instructions and over calls
-    -   `dcr`: continue until a `rat` instruction
--   visual mode
-    -   `V`: enter visual mode
-    -   `?`: see keyboard shortcuts
-    -   `:`: enter command mode, `<enter>` to exit command mode
+```assembly
+	mov eax, 3	;int x = 3
+	jmp f				;goto f
+	mov eax, 0	;<- never executed
+
+f:						;f
+	ret					;return x
+```
+
+- `call` vs `jmp`
+
+```assembly
+	mov edi,1000
+	call f
+	add eax, 7	;will be executed when f is done
+	ret
+
+f:
+	mov eax, edi ;copy our first parameter into eax (to be returned)
+	ret ;go back to where the function is called
+```
+
+```assembly
+	mov edi,1000
+	jmp f
+	add eax, 7 ;<- never executed
+	ret
+
+f:
+	mov eax, edi ;copy our first parameter into eax (to be returned)
+	ret ;go back to main
+```
+
+- More control flow
+
+```assembly
+	mov eax, 3	;int x = 3
+	cmp eax, 4	;how does eax compare to 4?
+	je f				;jump to f if it's equal
+```
+
+```assembly
+	mov eax, 3	;int x = 3
+	cmp eax, 4	;how does eax compare to 4?
+	jl f				;jump to f if eax is less than 4
+```
+
+```assembly
+cmp eax, 3	;subtracts 3 from eax value, but it won't change eax
+sub eax, 3	;subtracts 3 from eax value, but it will change eax
+```
+
+- Signed & unsigned value
+
+  - Use `jg` or `jl` to compare 2 signed values
+  - Use `ja` or `jb` to compare 2 unsigned values
+  - To compare a signed value to a unsigned value
+
+  | English              | Less Than | Less or Equal | Equal    | Greater or Equal | Greater Than | Not Equal  |
+  | -------------------- | --------- | ------------- | -------- | ---------------- | ------------ | ---------- |
+  | C/C++                | <         | <=            | ==       | >=               | >            | !=         |
+  | Assembly  (signed)   | jl        | jle           | je or jz | jge              | jg           | jne or jnz |
+  | Assembly  (unsigned) | jb        | jbe           | je or jz | jae              | ja           | jne or jnz |
 
 ## References
 
--   [programming from the ground up]
--   [assembly tutorial]
+-   [Programming from the Ground Up]
+-   [Assembly Tutorial]
 -   [Introduction To Reverse Engineering With Radare2]
+-   [The Official Radare2 Book]
+-   [2010 CS 301 - Assembly Language]
 
-[programming from the ground up]: https://www.amazon.co.uk/Programming-Ground-Up-Jonathan-Bartlett/dp/0975283847
-[assembly tutorial]: https://www.tutorialspoint.com/assembly_programming/assembly_tutorial.pdf
-[introduction to reverse engineering with radare2]: https://www.youtube.com/watch?v=LAkYW5ixvhg&ab_channel=TobalJackson
+
+
+[Programming from the Ground Up]: https://www.amazon.co.uk/Programming-Ground-Up-Jonathan-Bartlett/dp/0975283847
+[Assembly Tutorial]: https://www.tutorialspoint.com/assembly_programming/assembly_tutorial.pdf
+[Introduction To Reverse Engineering With Radare2]: https://www.youtube.com/watch?v=LAkYW5ixvhg&ab_channel=TobalJackson
+[crackmes]: https://book.rada.re/crackmes/ioli/ioli_0x00.html
+[The Official Radare2 Book]: https://book.rada.re/
+[2010 CS 301 - Assembly Language]: https://www.cs.uaf.edu/2010/fall/cs301/
+
