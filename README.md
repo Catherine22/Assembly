@@ -96,7 +96,7 @@ arr:  ;An integer array
 - Example 4 - String
 
 ```assembly
-movzx eax,BYTE[myStr + 2] ;read this byte into eax
+movzx eax, BYTE[myStr + 2] ;read this byte into eax
 ret
 
 section .data
@@ -317,6 +317,63 @@ sub eax, 3	;subtracts 3 from eax value, but it will change eax
   | C/C++                | <         | <=            | ==       | >=               | >            | !=         |
   | Assembly  (signed)   | jl        | jle           | je or jz | jge              | jg           | jne or jnz |
   | Assembly  (unsigned) | jb        | jbe           | je or jz | jae              | ja           | jne or jnz |
+
+## Useful Commands
+
+- Get started
+
+```bash
+$ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
+	> aa									# or aaa
+	> pdf@PROCEDURE_NAME 	# any procedure you want to focus on, e.g. main.
+```
+
+- Type commands
+
+```bash
+> :			# type : to enter command mode
+> enter # quit the command mode
+```
+
+- Add a breakpoint and continue running
+
+```bash
+> db ADDRESS 	# E.g. db 0x004006e5
+> dc 					# continue running
+> s 					# step
+> S 					# step over
+> ood 				# restart execution
+```
+
+- Switch to visual mode
+
+```bash
+> v # switch to visual mode
+> p # switch to different panel
+```
+
+- Print a value at an address or register
+
+```bash
+> ? REG_NAME 					# e.g. ? rax
+> dr?REG_NAME 				# e.g. dr?rax
+> px @REG_NAME 				# e.g. px @rax
+> px BYTES @REG_NAME 	# e.g. px 4 @rax
+```
+
+- Help
+
+```bash
+> d? # print the manual of debug commands
+```
+
+- Quit
+
+```bash
+> q
+```
+
+
 
 ## References
 
