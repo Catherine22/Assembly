@@ -113,10 +113,5 @@ RUN r2pm init && \
   r2pm update && \
   chown -R r2:r2 /home/r2/.config
 
-# Install r2dec plugin in r2 repo to generate the pseudo C code
-RUN apt-get install -y libssl-dev
-RUN r2pm install 
-
 # Base command for container
-RUN cd /app/src
 CMD ["/bin/bash"]
