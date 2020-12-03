@@ -1,6 +1,41 @@
-Assembly & Reverse Engineering
+# Assembly & Reverse Engineering
 
-## Set up environments
+Learning assembly from scratch including:
+
+- Assembly programming
+- Reverse and analyse binary files
+
+## Navigation
+
+[Assembly Programming](#assembly-programming)
+
+- [Environments & Tools](#environments--tools-1)
+- [Set Up Environments](#set-up-environments-1)
+- [Memory Allocation](#memory-allocation)
+- [Registers](#registers)
+- [System Calls](system-calls)
+- [Function Calls](function-calls)
+- [Instructions](#instructions)
+- [Debug](#debug)
+
+[Reversing Engineering with Radare 2](reversing-engineering-with-radare2)
+
+- [Environments & Tools](#environments--tools-2)
+- [Set Up Environments](#set-up-environments-2)
+- [Assembly to C](#assembly-to-c)
+- [Useful Commands](#useful-command)
+
+[References](#references)
+
+# Assembly Programming
+
+## Environments & Tools
+
+- x86_64 architecture
+
+- Linux CentOS 7 with nasm
+
+## Set Up Environments
 
 NOTICE, the following docker image supports x86_64 architecture.
 
@@ -218,9 +253,15 @@ $gdb 2_hello
 -   list: show the code
 -   list x,y: show the code from line x to y
 
-## Reversing Engineering with Radare 2
+# Reversing Engineering with Radare 2
 
-### Set up environments
+## Environments & Tools
+
+- x86_64 architecture
+- Linux Debian 10 with radare2
+- macOS with cutter (Optional, cutter is basically a GUI of radare2)
+
+## Set Up Environments
 
 1. Build the docker image
 
@@ -242,7 +283,7 @@ $docker exec -it radare2 /bin/bash
 
 4. Get started by [crackmes]
 
-### Assembly to C
+## Assembly to C
 
 - Stack
 
@@ -350,6 +391,7 @@ $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
 ```bash
 > v # switch to visual mode
 > p # switch to different panel
+> q # leave the visual mode.
 ```
 
 - Print a value at an address or register
@@ -373,9 +415,53 @@ $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
 > q
 ```
 
+A simple debug flow could be
 
+1. Execute and analyse the binary file, and check what main procedure does.
 
-## References
+```bash
+$ r2 -d ./crackme0x00
+> aa
+> pdf@main
+```
+
+2. Check the details of key procedures.
+
+```bash
+> pdf@PROC_NAME
+```
+
+3. Add breakpoints and continue debugging
+
+```bash
+> db ADDRESS 	# E.g. db 0x004006e5
+>	db ADDRESS 	# E.g. db 0x004007e5
+```
+
+4. Check all the breakpoints and remove unwanted ones.
+
+```assembly
+> db
+> db -ADDRESS 	# E.g. db 0x004007e5
+```
+
+5. Execute the programme step by step, or jump to next breakpoint.
+
+```bash
+> dc						# jump to next breakpoint
+> V							# switch to the visual mode to better check the values of registers
+> s							# move on to next line
+> S							# step over next line
+```
+
+5. Restart the programme if the process is finished.
+
+```bash
+> ood
+> q							# exit the visual mode
+```
+
+# References
 
 -   [Programming from the Ground Up]
 -   [Assembly Tutorial]
