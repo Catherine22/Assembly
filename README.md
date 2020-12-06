@@ -161,9 +161,9 @@ section .data
 | 64-bit   | 32-bit     | 16-bit     | 8-bit      |
 | -------- | ---------- | ---------- | ---------- |
 | rax      | eax        | ax         | ah and al  |
+| rbx      | ebx        | bx         | bh and bl  |
 | rcx      | ecx        | cx         | ch and cl  |
 | rdx      | edx        | dx         | dh and dl  |
-| rbx      | ebx        | bx         | bh and bl  |
 | rsp      | esp        | sp         | spl        |
 | rbp      | ebp        | bp         | bpl        |
 | rsi      | esi        | si         | sil        |

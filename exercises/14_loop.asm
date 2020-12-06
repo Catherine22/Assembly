@@ -30,7 +30,7 @@ l1:
     inc eax
     add eax, '0'
     pop rcx ;ecx for 32 bit, and rcx for 64 bit
-loop l1
+    loop l1
 
     mov eax, STDOUT
     int 0x80

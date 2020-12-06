@@ -16,7 +16,7 @@ log() {
 }
 
 log "Assembling with Nasm"
-nasm -f elf64 -g -o $FILE.o $FILE.asm
+nasm -f elf64 -o $FILE.o $FILE.asm
 check_status "nasm"
 
 log "Linking..."
