@@ -452,6 +452,7 @@ $ r2 -d ./crackme0x00
 > V							# switch to the visual mode to better check the values of registers
 > s							# move on to next line
 > S							# step over next line
+> TAB						# click on tab to show the details of registers
 ```
 
 5. Restart the programme if the process is finished.
