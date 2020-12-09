@@ -2,28 +2,28 @@
 
 Learning assembly from scratch including:
 
-- Assembly programming
-- Reverse and analyse binary files
+-   Assembly programming
+-   Reverse and analyse binary files
 
 ## Navigation
 
 [Assembly Programming](#assembly-programming)
 
-- [Environments & Tools](#environments--tools-1)
-- [Set Up Environments](#set-up-environments-1)
-- [Memory Allocation](#memory-allocation)
-- [Registers](#registers)
-- [System Calls](system-calls)
-- [Function Calls](function-calls)
-- [Instructions](#instructions)
-- [Debug](#debug)
+-   [Environments & Tools](#environments--tools-1)
+-   [Set Up Environments](#set-up-environments-1)
+-   [Memory Allocation](#memory-allocation)
+-   [Registers](#registers)
+-   [System Calls](system-calls)
+-   [Function Calls](function-calls)
+-   [Instructions](#instructions)
+-   [Debug](#debug)
 
 [Reversing Engineering with Radare 2](reversing-engineering-with-radare2)
 
-- [Environments & Tools](#environments--tools-2)
-- [Set Up Environments](#set-up-environments-2)
-- [Assembly to C](#assembly-to-c)
-- [Useful Commands](#useful-command)
+-   [Environments & Tools](#environments--tools-2)
+-   [Set Up Environments](#set-up-environments-2)
+-   [Assembly to C](#assembly-to-c)
+-   [Useful Commands](#useful-command)
 
 [References](#references)
 
@@ -31,9 +31,9 @@ Learning assembly from scratch including:
 
 ## Environments & Tools
 
-- x86_64 architecture
+-   x86_64 architecture
 
-- Linux CentOS 7 with nasm
+-   Linux CentOS 7 with nasm
 
 ## Set Up Environments
 
@@ -65,70 +65,70 @@ $./exec 2_hello.asm
 
 ## Memory Allocation
 
-- Define constants or functions
+-   Define constants or functions
 
 ```assembly
 section .data
-	somePtr:
-    dd constant0
-	someFunc:
-		...
-		ret
+  somePtr:
+  dd constant0
+  someFunc:
+    ...
+    ret
 ```
 
-- Access constants
+-   Access constants
 
 ```assembly
 mov ... DWORD[somePtr] ...
 ```
 
-- Table for generating constants
+-   Table for generating constants
 
-  | Instruction | C++   | Access         | **Register** | Bits | Bytes |
-  | ----------- | ----- | -------------- | ------------ | ---- | ----- |
-  | dq 0x3      | long  | QWORD[somePtr] | r _ _        | 64   | 8     |
-  | dd 0x3      | int   | DWORD[somePtr] | e _ _        | 32   | 4     |
-  | dw 0x3      | short | WORD[somePtr]  | _ _          | 16   | 2     |
-  | db 0x3      | char  | BYTE[somePtr]  | _ l          | 8    | 1     |
+    | Instruction | C++   | Access         | **Register** | Bits | Bytes |
+    | ----------- | ----- | -------------- | ------------ | ---- | ----- |
+    | dq 0x3      | long  | QWORD[somePtr] | r \_ \_      | 64   | 8     |
+    | dd 0x3      | int   | DWORD[somePtr] | e \_ \_      | 32   | 4     |
+    | dw 0x3      | short | WORD[somePtr]  | \_ \_        | 16   | 2     |
+    | db 0x3      | char  | BYTE[somePtr]  | \_ l         | 8    | 1     |
 
-- Example 1 - Load a statically allocated integer from memory
+-   Example 1 - Load a statically allocated integer from memory
 
 ```assembly
-	mov eax, DWORD [myInt]	;copy myInt into eax
-	ret
+  mov eax, DWORD [myInt]	;copy myInt into eax
+  ret
 
 section .data
 myInt:
-	dd 0xa3a2a1a0	;"data DWORD" containing this value
+  dd 0xa3a2a1a0	;"data DWORD" containing this value
 ```
 
-- Example 2 - Copy a pointer value into a register
+-   Example 2 - Copy a pointer value into a register
 
 ```assembly
-	mov rdx, myIntPtr	;copy the address myIntPtr into rdx (like C++: p=someIntPtr;)
-	mov eax, DWORD [rdx]	;read memory rdx points to (like C++: return *p;)
-	ret
+  mov rdx, myIntPtr	;copy the address myIntPtr into rdx (like C++: p=someIntPtr;)
+  mov eax, DWORD [rdx]	;read memory rdx points to (like C++: return *p;)
+  ret
 
 section .data
 myIntPtr:	; A place in memory, where we're storing an integer
-	dd 123	; "data DWORD", our integer
+  dd 123	; "data DWORD", our integer
 ```
 
-- Example 3 - A 4-digit array
+-   Example 3 - A 4-digit array
 
 ```assembly
-	mov eax, DWORD [arr+4*2] ; read arr[2]
-	ret 
+  mov eax, DWORD [arr+4*2] ; read arr[2]
+  ret
 
 section .data
 arr:  ;An integer array
-	dd 100 ;"data DWORD", arr[0]
-	dd 101 ;arr[1]
-	dd 102 ;arr[2]
-	dd 103 ;arr[3]
+  dd 100 ;"data DWORD", arr[0]
+  dd 101 ;arr[1]
+  dd 102 ;arr[2]
+  dd 103 ;arr[3]
 ```
 
-- Example 4 - String
+-   Example 4 - String
 
 ```assembly
 movzx eax, BYTE[myStr + 2] ;read this byte into eax
@@ -136,12 +136,12 @@ ret
 
 section .data
 myStr:
-	db "woa"	;= db 'w','o','a'
-						;= db 'woa'
-						;= db 'w' db 'o' db 'a'
+  db "woa"	;= db 'w','o','a'
+			;= db 'woa'
+			;= db 'w' db 'o' db 'a'
 ```
 
-- Example 5 - update data
+-   Example 5 - update data
 
 ```assembly
 mov DWORD[func+1],7 ;overwrite constant loaded by first, 0xb8 instruction
@@ -149,12 +149,10 @@ call func
 ret
 
 section .data
-	func:
-		mov eax,2 ;<- modified at runtime!
-		ret
+  func:
+    mov eax,2 ;<- modified at runtime!
+    ret
 ```
-
-
 
 ## Registers
 
@@ -257,9 +255,9 @@ $gdb 2_hello
 
 ## Environments & Tools
 
-- x86_64 architecture
-- Linux Debian 10 with radare2
-- macOS with cutter (Optional, cutter is basically a GUI of radare2)
+-   x86_64 architecture
+-   Linux Debian 10 with radare2
+-   macOS with cutter (Optional, cutter is basically a GUI of radare2)
 
 ## Set Up Environments
 
@@ -285,61 +283,61 @@ $docker exec -it radare2 /bin/bash
 
 ## Assembly to C
 
-- Stack
+-   Stack
 
 ```assembly
-push rbp 			;stash old value of rbp on the stack
+push rbp 		;stash old value of rbp on the stack
 mov rbp, rsp	;rbp == stack pointer at the start of function
 sub rsp, 1000	;make some room on the stack
 ```
 
-- Function and variables
+-   Function and variables
 
 ```assembly
-	mov eax, 3	;int x = 3
-	jmp f				;goto f
-	mov eax, 0	;<- never executed
+  mov eax, 3	;int x = 3
+  jmp f				;goto f
+  mov eax, 0	;<- never executed
 
 f:						;f
-	ret					;return x
+  ret					;return x
 ```
 
-- `call` vs `jmp`
+-   `call` vs `jmp`
 
 ```assembly
-	mov edi,1000
-	call f
-	add eax, 7	;will be executed when f is done
-	ret
+  mov edi,1000
+  call f
+  add eax, 7	;will be executed when f is done
+  ret
 
 f:
-	mov eax, edi ;copy our first parameter into eax (to be returned)
-	ret ;go back to where the function is called
+  mov eax, edi ;copy our first parameter into eax (to be returned)
+  ret ;go back to where the function is called
 ```
 
 ```assembly
-	mov edi,1000
-	jmp f
-	add eax, 7 ;<- never executed
-	ret
+  mov edi,1000
+  jmp f
+  add eax, 7 ;<- never executed
+  ret
 
 f:
-	mov eax, edi ;copy our first parameter into eax (to be returned)
-	ret ;go back to main
+  mov eax, edi ;copy our first parameter into eax (to be returned)
+  ret ;go back to main
 ```
 
-- More control flow
+-   More control flow
 
 ```assembly
-	mov eax, 3	;int x = 3
-	cmp eax, 4	;how does eax compare to 4?
-	je f				;jump to f if it's equal
+  mov eax, 3	;int x = 3
+  cmp eax, 4	;how does eax compare to 4?
+  je f			;jump to f if it's equal
 ```
 
 ```assembly
-	mov eax, 3	;int x = 3
-	cmp eax, 4	;how does eax compare to 4?
-	jl f				;jump to f if eax is less than 4
+  mov eax, 3	;int x = 3
+  cmp eax, 4	;how does eax compare to 4?
+  jl f			;jump to f if eax is less than 4
 ```
 
 ```assembly
@@ -347,36 +345,36 @@ cmp eax, 3	;subtracts 3 from eax value, but it won't change eax
 sub eax, 3	;subtracts 3 from eax value, but it will change eax
 ```
 
-- Signed & unsigned value
+-   Signed & unsigned value
 
-  - Use `jg` or `jl` to compare 2 signed values
-  - Use `ja` or `jb` to compare 2 unsigned values
-  - To compare a signed value to a unsigned value
+    -   Use `jg` or `jl` to compare 2 signed values
+    -   Use `ja` or `jb` to compare 2 unsigned values
+    -   To compare a signed value to a unsigned value
 
-  | English              | Less Than | Less or Equal | Equal    | Greater or Equal | Greater Than | Not Equal  |
-  | -------------------- | --------- | ------------- | -------- | ---------------- | ------------ | ---------- |
-  | C/C++                | <         | <=            | ==       | >=               | >            | !=         |
-  | Assembly  (signed)   | jl        | jle           | je or jz | jge              | jg           | jne or jnz |
-  | Assembly  (unsigned) | jb        | jbe           | je or jz | jae              | ja           | jne or jnz |
+    | English             | Less Than | Less or Equal | Equal    | Greater or Equal | Greater Than | Not Equal  |
+    | ------------------- | --------- | ------------- | -------- | ---------------- | ------------ | ---------- |
+    | C/C++               | <         | <=            | ==       | >=               | >            | !=         |
+    | Assembly (signed)   | jl        | jle           | je or jz | jge              | jg           | jne or jnz |
+    | Assembly (unsigned) | jb        | jbe           | je or jz | jae              | ja           | jne or jnz |
 
 ## Useful Commands
 
-- Get started
+-   Get started
 
 ```bash
 $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
-	> aa									# or aaa
+    > aa									# or aaa
 	> pdf@PROCEDURE_NAME 	# any procedure you want to focus on, e.g. main.
 ```
 
-- Type commands
+-   Type commands
 
 ```bash
 > :			# type : to enter command mode
 > enter # quit the command mode
 ```
 
-- Add a breakpoint and continue running
+-   Add a breakpoint and continue running
 
 ```bash
 > db ADDRESS 	# E.g. db 0x004006e5
@@ -386,7 +384,7 @@ $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
 > ood 				# restart execution
 ```
 
-- Switch to visual mode
+-   Switch to visual mode
 
 ```bash
 > v # switch to visual mode
@@ -394,7 +392,7 @@ $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
 > q # leave the visual mode.
 ```
 
-- Print a value at an address or register
+-   Print a value at an address or register
 
 ```bash
 > ? REG_NAME 					# e.g. ? rax
@@ -403,13 +401,13 @@ $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
 > px BYTES @REG_NAME 	# e.g. px 4 @rax
 ```
 
-- Help
+-   Help
 
 ```bash
 > d? # print the manual of debug commands
 ```
 
-- Quit
+-   Quit
 
 ```bash
 > q
@@ -470,12 +468,9 @@ $ r2 -d ./crackme0x00
 -   [The Official Radare2 Book]
 -   [2010 CS 301 - Assembly Language]
 
-
-
-[Programming from the Ground Up]: https://www.amazon.co.uk/Programming-Ground-Up-Jonathan-Bartlett/dp/0975283847
-[Assembly Tutorial]: https://www.tutorialspoint.com/assembly_programming/assembly_tutorial.pdf
-[Introduction To Reverse Engineering With Radare2]: https://www.youtube.com/watch?v=LAkYW5ixvhg&ab_channel=TobalJackson
+[programming from the ground up]: https://www.amazon.co.uk/Programming-Ground-Up-Jonathan-Bartlett/dp/0975283847
+[assembly tutorial]: https://www.tutorialspoint.com/assembly_programming/assembly_tutorial.pdf
+[introduction to reverse engineering with radare2]: https://www.youtube.com/watch?v=LAkYW5ixvhg&ab_channel=TobalJackson
 [crackmes]: https://book.rada.re/crackmes/ioli/ioli_0x00.html
-[The Official Radare2 Book]: https://book.rada.re/
-[2010 CS 301 - Assembly Language]: https://www.cs.uaf.edu/2010/fall/cs301/
-
+[the official radare2 book]: https://book.rada.re/
+[2010 cs 301 - assembly language]: https://www.cs.uaf.edu/2010/fall/cs301/
