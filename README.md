@@ -99,33 +99,33 @@ mov ... DWORD[somePtr] ...
 
 section .data
 myInt:
-  dd 0xa3a2a1a0	;"data DWORD" containing this value
+  dd 0xa3a2a1a0			;"data DWORD" containing this value
 ```
 
 -   Example 2 - Copy a pointer value into a register
 
 ```assembly
-  mov rdx, myIntPtr	;copy the address myIntPtr into rdx (like C++: p=someIntPtr;)
-  mov eax, DWORD [rdx]	;read memory rdx points to (like C++: return *p;)
+  mov rdx, myIntPtr		;copy the address myIntPtr into rdx (like C++: p=someIntPtr;)
+  mov eax, DWORD [rdx]		;read memory rdx points to (like C++: return *p;)
   ret
 
 section .data
-myIntPtr:	; A place in memory, where we're storing an integer
-  dd 123	; "data DWORD", our integer
+myIntPtr:			; A place in memory, where we're storing an integer
+  dd 123			; "data DWORD", our integer
 ```
 
 -   Example 3 - A 4-digit array
 
 ```assembly
-  mov eax, DWORD [arr+4*2] ; read arr[2]
+  mov eax, DWORD [arr+4*2] ;read arr[2]
   ret
 
 section .data
-arr:  ;An integer array
-  dd 100 ;"data DWORD", arr[0]
-  dd 101 ;arr[1]
-  dd 102 ;arr[2]
-  dd 103 ;arr[3]
+arr:		;An integer array
+  dd 100	;"data DWORD", arr[0]
+  dd 101	;arr[1]
+  dd 102	;arr[2]
+  dd 103	;arr[3]
 ```
 
 -   Example 4 - String
@@ -137,20 +137,20 @@ ret
 section .data
 myStr:
   db "woa"	;= db 'w','o','a'
-			;= db 'woa'
-			;= db 'w' db 'o' db 'a'
+		;= db 'woa'
+		;= db 'w' db 'o' db 'a'
 ```
 
 -   Example 5 - update data
 
 ```assembly
-mov DWORD[func+1],7 ;overwrite constant loaded by first, 0xb8 instruction
+mov DWORD[func+1],7	;overwrite constant loaded by first, 0xb8 instruction
 call func
 ret
 
 section .data
   func:
-    mov eax,2 ;<- modified at runtime!
+    mov eax,2		;<- modified at runtime!
     ret
 ```
 
@@ -286,7 +286,7 @@ $docker exec -it radare2 /bin/bash
 -   Stack
 
 ```assembly
-push rbp 		;stash old value of rbp on the stack
+push rbp 	;stash old value of rbp on the stack
 mov rbp, rsp	;rbp == stack pointer at the start of function
 sub rsp, 1000	;make some room on the stack
 ```
@@ -295,11 +295,11 @@ sub rsp, 1000	;make some room on the stack
 
 ```assembly
   mov eax, 3	;int x = 3
-  jmp f				;goto f
+  jmp f		;goto f
   mov eax, 0	;<- never executed
 
-f:						;f
-  ret					;return x
+f:		;f
+  ret		;return x
 ```
 
 -   `call` vs `jmp`
@@ -311,19 +311,19 @@ f:						;f
   ret
 
 f:
-  mov eax, edi ;copy our first parameter into eax (to be returned)
-  ret ;go back to where the function is called
+  mov eax, edi	;copy our first parameter into eax (to be returned)
+  ret 		;go back to where the function is called
 ```
 
 ```assembly
   mov edi,1000
   jmp f
-  add eax, 7 ;<- never executed
+  add eax, 7	;<- never executed
   ret
 
 f:
-  mov eax, edi ;copy our first parameter into eax (to be returned)
-  ret ;go back to main
+  mov eax, edi	;copy our first parameter into eax (to be returned)
+  ret		;go back to main
 ```
 
 -   More control flow
@@ -331,13 +331,13 @@ f:
 ```assembly
   mov eax, 3	;int x = 3
   cmp eax, 4	;how does eax compare to 4?
-  je f			;jump to f if it's equal
+  je f		;jump to f if it's equal
 ```
 
 ```assembly
   mov eax, 3	;int x = 3
   cmp eax, 4	;how does eax compare to 4?
-  jl f			;jump to f if eax is less than 4
+  jl f		;jump to f if eax is less than 4
 ```
 
 ```assembly
@@ -363,48 +363,48 @@ sub eax, 3	;subtracts 3 from eax value, but it will change eax
 
 ```bash
 $ r2 -d ./crackme0x00 	# analyse a binary file with r2 in debug mode
-    > aa									# or aaa
-	> pdf@PROCEDURE_NAME 	# any procedure you want to focus on, e.g. main.
+  > aa			# or aaa
+  > pdf@PROCEDURE_NAME 	# any procedure you want to focus on, e.g. main.
 ```
 
 -   Type commands
 
 ```bash
 > :			# type : to enter command mode
-> enter # quit the command mode
+> enter 		# quit the command mode
 ```
 
 -   Add a breakpoint and continue running
 
 ```bash
-> db ADDRESS 	# E.g. db 0x004006e5
-> dc 					# continue running
-> s 					# step
-> S 					# step over
-> ood 				# restart execution
+> db ADDRESS		# E.g. db 0x004006e5
+> dc 			# continue running
+> s 			# step
+> S 			# step over
+> ood 			# restart execution
 ```
 
 -   Switch to visual mode
 
 ```bash
-> v # switch to visual mode
-> p # switch to different panel
-> q # leave the visual mode.
+> v 			# switch to visual mode
+> p 			# switch to different panel
+> q 			# leave the visual mode.
 ```
 
 -   Print a value at an address or register
 
 ```bash
-> ? REG_NAME 					# e.g. ? rax
-> dr?REG_NAME 				# e.g. dr?rax
-> px @REG_NAME 				# e.g. px @rax
+> ? REG_NAME 		# e.g. ? rax
+> dr?REG_NAME 		# e.g. dr?rax
+> px @REG_NAME 		# e.g. px @rax
 > px BYTES @REG_NAME 	# e.g. px 4 @rax
 ```
 
 -   Help
 
 ```bash
-> d? # print the manual of debug commands
+> d? 			# print the manual of debug commands
 ```
 
 -   Quit
@@ -432,7 +432,7 @@ $ r2 -d ./crackme0x00
 3. Add breakpoints and continue debugging
 
 ```bash
-> db ADDRESS 	# E.g. db 0x004006e5
+> db ADDRESS		# E.g. db 0x004006e5
 >	db ADDRESS 	# E.g. db 0x004007e5
 ```
 
@@ -440,24 +440,24 @@ $ r2 -d ./crackme0x00
 
 ```assembly
 > db
-> db -ADDRESS 	# E.g. db 0x004007e5
+> db -ADDRESS		# E.g. db 0x004007e5
 ```
 
 5. Execute the programme step by step, or jump to next breakpoint.
 
 ```bash
-> dc						# jump to next breakpoint
-> V							# switch to the visual mode to better check the values of registers
-> s							# move on to next line
-> S							# step over next line
-> TAB						# click on tab to show the details of registers
+> dc			# jump to next breakpoint
+> V			# switch to the visual mode to better check the values of registers
+> s			# move on to next line
+> S			# step over next line
+> TAB			# click on tab to show the details of registers
 ```
 
 5. Restart the programme if the process is finished.
 
 ```bash
 > ood
-> q							# exit the visual mode
+> q			# exit the visual mode
 ```
 
 # References
